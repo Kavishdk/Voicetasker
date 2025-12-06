@@ -156,7 +156,7 @@ const App: React.FC = () => {
   }, [tasks, searchQuery, filterStatus, filterPriority, filterDueDate]);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col font-sans text-theme-text-main">
       {/* Background Blobs for Atmosphere */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -173,7 +173,7 @@ const App: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-theme-text-main to-theme-text-muted">
               VoiceTasker
             </h1>
           </div>
@@ -202,13 +202,13 @@ const App: React.FC = () => {
           <div className="glass p-1.5 rounded-xl flex items-center">
             <button
               onClick={() => setViewMode(ViewMode.Board)}
-              className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${viewMode === ViewMode.Board ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${viewMode === ViewMode.Board ? 'bg-theme-paper text-theme-primary shadow-sm' : 'text-theme-text-muted hover:text-theme-text-main'}`}
             >
               Board
             </button>
             <button
               onClick={() => setViewMode(ViewMode.List)}
-              className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${viewMode === ViewMode.List ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${viewMode === ViewMode.List ? 'bg-theme-paper text-theme-primary shadow-sm' : 'text-theme-text-muted hover:text-theme-text-main'}`}
             >
               List
             </button>
@@ -222,12 +222,12 @@ const App: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search tasks..."
-                className="block w-full rounded-xl border-0 bg-white/80 backdrop-blur-sm py-2.5 pl-4 pr-10 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all group-hover:bg-white"
+                className="input-field block w-full"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5 text-theme-text-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -238,7 +238,7 @@ const App: React.FC = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="block w-full rounded-xl border-0 bg-white/80 backdrop-blur-sm py-2.5 pl-3 pr-10 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 cursor-pointer hover:bg-white transition-all"
+                className="input-field block w-full cursor-pointer"
               >
                 <option value="All">All Status</option>
                 {Object.values(TaskStatus).map(s => (
@@ -252,7 +252,7 @@ const App: React.FC = () => {
               <select
                 value={filterPriority}
                 onChange={(e) => setFilterPriority(e.target.value)}
-                className="block w-full rounded-xl border-0 bg-white/80 backdrop-blur-sm py-2.5 pl-3 pr-10 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 cursor-pointer hover:bg-white transition-all"
+                className="input-field block w-full cursor-pointer"
               >
                 <option value="All">All Priority</option>
                 {Object.values(TaskPriority).map(p => (
@@ -266,14 +266,14 @@ const App: React.FC = () => {
               type="date"
               value={filterDueDate}
               onChange={(e) => setFilterDueDate(e.target.value)}
-              className="block w-full sm:w-auto rounded-xl border-0 bg-white/80 backdrop-blur-sm py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 hover:bg-white transition-all"
+              className="input-field block w-full sm:w-auto"
             />
 
             {/* Clear Button */}
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="text-sm text-slate-500 hover:text-indigo-600 font-semibold px-3 py-1 rounded-lg hover:bg-indigo-50 transition-colors"
+                className="text-sm text-theme-text-muted hover:text-theme-primary font-semibold px-3 py-1 rounded-lg hover:bg-theme-paper transition-colors"
               >
                 Clear Filters
               </button>

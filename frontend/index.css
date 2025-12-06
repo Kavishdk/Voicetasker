@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-app-dark text-text-primary font-sans antialiased;
+    @apply bg-theme-dark text-theme-text-main font-sans antialiased;
     background-image:
         radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
         radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
@@ -18,22 +18,22 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-app-dark;
+    @apply bg-theme-dark;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-app-paper rounded-full hover:bg-accent-primary/50 transition-colors;
+    @apply bg-theme-paper rounded-full hover:bg-theme-primary/50 transition-colors;
 }
 
 /* Glassmorphism Utilities */
 .glass {
-    @apply bg-app-paper/60 backdrop-blur-xl border border-white/10 shadow-lg;
+    @apply bg-theme-paper/60 backdrop-blur-xl border border-white/10 shadow-lg;
 }
 
 .glass-card {
-    @apply bg-app-paper/40 backdrop-blur-md border border-white/5 shadow-md hover:shadow-neon-primary transition-all duration-300 hover:-translate-y-1;
+    @apply bg-theme-paper/40 backdrop-blur-md border border-white/5 shadow-md hover:shadow-neon-primary transition-all duration-300 hover:-translate-y-1;
 }
 
 .input-field {
-    @apply bg-app-dark/50 border border-white/10 rounded-xl px-4 py-2.5 text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary transition-all;
+    @apply bg-theme-dark/50 border border-white/10 rounded-xl px-4 py-2.5 text-theme-text-main placeholder:text-theme-text-muted focus:outline-none focus:border-theme-primary focus:ring-1 focus:ring-theme-primary transition-all;
 }

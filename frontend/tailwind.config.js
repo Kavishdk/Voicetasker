@@ -8,25 +8,21 @@ export default {
         extend: {
             colors: {
                 // Dark Backgrounds
-                // Dark Backgrounds
-                app: {
-                    DEFAULT: '#0f172a', // Slate 900
-                    paper: '#1e293b',   // Slate 800
-                    dark: '#020617',    // Slate 950
-                },
+                'theme-bg': '#0f172a',      // Slate 900
+                'theme-paper': '#1e293b',   // Slate 800
+                'theme-dark': '#020617',    // Slate 950
+
                 // Neon Accents
-                accent: {
-                    primary: '#8b5cf6',   // Violet 500
-                    secondary: '#ec4899', // Pink 500
-                    success: '#10b981',   // Emerald 500
-                    warning: '#f59e0b',   // Amber 500
-                    danger: '#ef4444',    // Red 500
-                    info: '#3b82f6',      // Blue 500
-                },
-                text: {
-                    primary: '#f8fafc',   // Slate 50
-                    secondary: '#94a3b8', // Slate 400
-                }
+                'theme-primary': '#8b5cf6',   // Violet 500
+                'theme-secondary': '#ec4899', // Pink 500
+                'theme-success': '#10b981',   // Emerald 500
+                'theme-warning': '#f59e0b',   // Amber 500
+                'theme-danger': '#ef4444',    // Red 500
+                'theme-info': '#3b82f6',      // Blue 500
+
+                // Text
+                'theme-text-main': '#f8fafc',   // Slate 50
+                'theme-text-muted': '#94a3b8', // Slate 400
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
