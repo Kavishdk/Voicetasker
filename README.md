@@ -1,88 +1,103 @@
 # VoiceTasker 🎙️
 
-**VoiceTasker** is a smart, voice-enabled task management application designed to streamline your productivity. With built-in AI capabilities, you can simply speak your tasks, and VoiceTasker will automatically categorize, prioritize, and schedule them for you.
+Welcome to **VoiceTasker**, a smart, voice-enabled task management application. This project was built to demonstrate how modern AI can streamline productivity by allowing users to simply *speak* their tasks instead of typing them out.
 
-Built with **React**, **TypeScript**, **Tailwind CSS**, and **Google Gemini AI**.
+With VoiceTasker, you can say *"Remind me to submit the report by next Friday, it's urgent"*, and the application will automatically create a task with the correct title, due date, and priority.
 
+## 🚀 Key Features
 
-
-## 🚀 Features
-
--   **🗣️ Voice-to-Task:** Create tasks instantly using voice commands. The AI parses your speech to extract the title, description, priority, and due date.
--   **🤖 AI-Powered Parsing:** Leverages Google's Gemini AI to understand natural language context (e.g., "Remind me to submit the report by next Friday with high priority").
--   **📋 Kanban & List Views:** Switch seamlessly between a Kanban board for workflow visualization and a standard list view.
--   **🔍 Smart Filtering:** Filter tasks by status, priority, due date, or search by text.
--   **📱 Responsive Design:** Fully responsive interface that works great on desktop and mobile devices.
--   **💾 Local Storage:** Your tasks are saved locally in your browser, so you never lose track of your work.
+-   **🗣️ Voice-to-Task:** Create tasks instantly using natural voice commands.
+-   **🤖 Intelligent Parsing:** Powered by **Google Gemini**, the app understands context, relative dates (e.g., "tomorrow"), and priority keywords.
+-   **📋 Flexible Views:** Switch between a **Kanban Board** for workflow visualization and a **List View** for quick scanning.
+-   **🔍 Smart Filtering:** Easily find tasks by status, priority, due date, or text search.
+-   **☁️ Cloud Persistence:** Tasks are securely stored in **MongoDB Atlas**, ensuring your data is safe and accessible.
 
 ## 🛠️ Tech Stack
 
--   **Frontend:** React 18, TypeScript, Vite
--   **Styling:** Tailwind CSS
+This project is a full-stack application built with:
+
+-   **Frontend:** React (Vite), TypeScript, Tailwind CSS
+-   **Backend:** Node.js, Express
+-   **Database:** MongoDB Atlas (Cloud)
 -   **AI Integration:** Google Gemini API (`@google/genai`)
--   **Icons:** Heroicons
--   **Font:** Inter (Google Fonts)
 
 ## 📦 Installation & Setup
 
-Follow these steps to run VoiceTasker locally:
+Follow these steps to get the project running locally.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/voicetasker.git
-    cd voicetasker
-    ```
+### Prerequisites
+-   Node.js (v18 or higher)
+-   npm
+-   A MongoDB Atlas account (or local MongoDB)
+-   A Google Gemini API Key
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd voicetasker
+```
 
-3.  **Configure Environment Variables:**
-    Create a `.env.local` file in the root directory and add your Google Gemini API key:
-    ```env
-    VITE_GEMINI_API_KEY=your_gemini_api_key_here
-    ```
-    > **Note:** You can get a free API key from [Google AI Studio](https://aistudiocdn.com/google-ai-studio).
+### 2. Backend Setup
+Navigate to the backend directory and install dependencies:
+```bash
+cd backend
+npm install
+```
 
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+**Configure Environment Variables:**
+Open `backend/.env` and update the `MONGODB_URI` with your actual connection string:
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/voicetasker?retryWrites=true&w=majority
+```
 
-5.  **Open the app:**
-    Visit `http://localhost:5173` in your browser.
+Start the backend server:
+```bash
+npm start
+```
+The server will run on `http://localhost:5000`.
 
-## 📖 Usage Guide
+### 3. Frontend Setup
+Open a new terminal, navigate to the frontend directory, and install dependencies:
+```bash
+cd frontend
+npm install
+```
 
-1.  **Creating a Task (Voice):**
-    -   Click the **Microphone** button at the bottom right.
-    -   Speak your task (e.g., "Buy groceries tomorrow at 5 PM, priority medium").
-    -   The AI will fill in the details. Review and click **Create Task**.
+**Configure Environment Variables:**
+Create a `.env.local` file in the `frontend` directory and add your Gemini API Key:
+```env
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-2.  **Creating a Task (Manual):**
-    -   Click the **New Task** button in the header.
-    -   Fill in the details manually and save.
+Start the frontend development server:
+```bash
+npm run dev
+```
+The application will open at `http://localhost:5173`.
 
-3.  **Managing Tasks:**
-    -   Drag and drop tasks between columns in **Board View**.
-    -   Click on a task to **Edit** or **Delete** it.
-    -   Use the filters at the top to find specific tasks.
+## 📖 API Documentation
 
-## 🤝 Contributing
+The backend exposes a RESTful API at `http://localhost:5000/api`.
 
-Contributions are welcome! If you have ideas for improvements or new features, feel free to open an issue or submit a pull request.
+| Method | Endpoint | Description | Request Body Example |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/tasks` | Get all tasks | - |
+| `POST` | `/tasks` | Create a new task | `{ "title": "Buy milk", "priority": "Medium" }` |
+| `PUT` | `/tasks/:id` | Update a task | `{ "status": "Done" }` |
+| `DELETE` | `/tasks/:id` | Delete a task | - |
 
-1.  Fork the project
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+## 🧠 Design Decisions & Assumptions
 
-## 📄 License
+-   **Database Choice:** I chose **MongoDB Atlas** for the database to provide a robust, cloud-native solution that scales better than local files.
+-   **AI Processing:** Voice parsing is handled on the frontend using the Google Gemini API. This reduces latency by sending the audio directly to the AI model without an intermediate backend hop for processing.
+-   **Silence Detection:** To improve the user experience, the voice recorder automatically stops after 2 seconds of silence, so users don't have to manually click "Stop".
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🤖 AI Tools Usage
+
+During development, I utilized AI tools to accelerate the process:
+-   **Google Gemini:** Used for the core "Intelligent Parsing" feature to extract structured data from speech.
+-   **Coding Assistants:** Used to scaffold the initial React components and generate the Tailwind CSS utility classes, allowing me to focus on the core logic and integration.
 
 ---
-
-*Built with ❤️ by [Your Name]*
+*Built for SDE Assignment*
