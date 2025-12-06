@@ -8,7 +8,8 @@ export default {
         extend: {
             colors: {
                 // Dark Backgrounds
-                bg: {
+                // Dark Backgrounds
+                app: {
                     DEFAULT: '#0f172a', // Slate 900
                     paper: '#1e293b',   // Slate 800
                     dark: '#020617',    // Slate 950
