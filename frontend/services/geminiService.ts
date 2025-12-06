@@ -2,8 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ParsedTaskResponse, TaskStatus, TaskPriority } from "../types";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-// Note: In a real production app, you might proxy this through a backend. 
-// For this demo, we use the key directly in the frontend as per instructions.
+
 const ai = new GoogleGenAI({ apiKey: apiKey || '' });
 
 export const parseVoiceCommand = async (audioBase64: string, mimeType: string): Promise<ParsedTaskResponse> => {
@@ -13,9 +12,6 @@ export const parseVoiceCommand = async (audioBase64: string, mimeType: string): 
 
   const currentDate = new Date().toISOString();
 
-  // --- Prompt Engineering ---
-  // We provide the AI with the current date to handle relative dates like "tomorrow" or "next Friday".
-  // The system instruction defines the persona and specific rules for extraction.
   const systemInstruction = `
     You are an intelligent task assistant. 
     Your goal is to listen to the user's voice command and extract structured task information.

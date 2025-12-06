@@ -1,10 +1,3 @@
-/**
- * VoiceTasker - Main Application Component
- * 
- * This component serves as the entry point for the application, managing the global state
- * for tasks, view modes, and voice interaction. It coordinates the Board and List views
- * and handles the integration with the VoiceRecorder component.
- */
 import React, { useState, useEffect, useMemo } from 'react';
 import { Task, TaskStatus, TaskPriority, ParsedTaskResponse } from './types';
 import BoardView from './components/BoardView';
@@ -19,25 +12,19 @@ enum ViewMode {
 }
 
 const App: React.FC = () => {
-  // --- State Management ---
   const [tasks, setTasks] = useState<Task[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.Board);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-  // Voice Input State
   const [isProcessingVoice, setIsProcessingVoice] = useState(false);
   const [parsedVoiceData, setParsedVoiceData] = useState<ParsedTaskResponse | null>(null);
 
-  // Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('All');
   const [filterPriority, setFilterPriority] = useState<string>('All');
   const [filterDueDate, setFilterDueDate] = useState<string>('');
 
-  // --- Effects ---
-
-  // Load tasks from the backend when the component mounts
   useEffect(() => {
     const loadTasks = async () => {
       try {
@@ -50,11 +37,9 @@ const App: React.FC = () => {
     loadTasks();
   }, []);
 
-  // --- Handlers ---
-
   const handleCreateTask = () => {
-    setSelectedTask(null); // Clear selection for new task
-    setParsedVoiceData(null); // Clear any previous voice data
+    setSelectedTask(null);
+    setParsedVoiceData(null);
     setIsModalOpen(true);
   };
 
@@ -67,13 +52,11 @@ const App: React.FC = () => {
   const handleSaveTask = async (task: Task) => {
     try {
       if (selectedTask) {
-        // Update existing task
         const updatedTask = await updateTask(task);
         setTasks(tasks.map(t => t.id === task.id ? updatedTask : t));
       } else {
-        // Create new task
         const newTask = await createTask(task);
-        setTasks([...tasks, newTask]); // Optimistic update could be done here too
+        setTasks([...tasks, newTask]);
       }
     } catch (error) {
       console.error("Failed to save task:", error);
@@ -99,20 +82,16 @@ const App: React.FC = () => {
     if (taskToUpdate) {
       const updatedTask = { ...taskToUpdate, status: newStatus };
       try {
-        // Optimistic update: Update UI immediately
         setTasks(tasks.map(t => t.id === taskId ? updatedTask : t));
-        // Then send to backend
         await updateTask(updatedTask);
       } catch (error) {
         console.error("Failed to update status:", error);
-        // Revert on failure
         setTasks(tasks.map(t => t.id === taskId ? taskToUpdate : t));
         alert("Failed to update status.");
       }
     }
   };
 
-  // Voice Processing Handlers
   const handleVoiceProcessingStart = () => {
     setIsProcessingVoice(true);
   };
@@ -120,7 +99,7 @@ const App: React.FC = () => {
   const handleVoiceProcessingComplete = (result: ParsedTaskResponse) => {
     setIsProcessingVoice(false);
     setParsedVoiceData(result);
-    setSelectedTask(null); // Ensure we are in "Create" mode
+    setSelectedTask(null);
     setIsModalOpen(true);
   };
 
@@ -128,8 +107,6 @@ const App: React.FC = () => {
     setIsProcessingVoice(false);
     alert(error);
   };
-
-  // --- Filtering Logic ---
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -147,7 +124,6 @@ const App: React.FC = () => {
       const matchesStatus = filterStatus === 'All' || task.status === filterStatus;
       const matchesPriority = filterPriority === 'All' || task.priority === filterPriority;
 
-      // Date filter (exact match on YYYY-MM-DD)
       const taskDate = task.dueDate ? task.dueDate.split('T')[0] : '';
       const matchesDueDate = !filterDueDate || taskDate === filterDueDate;
 
