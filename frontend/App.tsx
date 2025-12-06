@@ -156,7 +156,6 @@ const App: React.FC = () => {
   }, [tasks, searchQuery, filterStatus, filterPriority, filterDueDate]);
 
   return (
-  return (
     <div className="min-h-screen flex flex-col font-sans text-slate-800">
       {/* Background Blobs for Atmosphere */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">

@@ -3,21 +3,37 @@
 @tailwind utilities;
 
 body {
-    @apply bg-slate-50 text-slate-900;
+    @apply bg-bg-dark text-text-primary font-sans antialiased;
     background-image:
-        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
     background-attachment: fixed;
-    background-size: cover;
     min-height: 100vh;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-bg-dark;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-bg-paper rounded-full hover:bg-accent-primary/50 transition-colors;
 }
 
 /* Glassmorphism Utilities */
 .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+    @apply bg-bg-paper/60 backdrop-blur-xl border border-white/10 shadow-lg;
 }
 
 .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-white/40 shadow-sm hover:shadow-md transition-all duration-300;
+    @apply bg-bg-paper/40 backdrop-blur-md border border-white/5 shadow-md hover:shadow-neon-primary transition-all duration-300 hover:-translate-y-1;
+}
+
+.input-field {
+    @apply bg-bg-dark/50 border border-white/10 rounded-xl px-4 py-2.5 text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary transition-all;
 }
