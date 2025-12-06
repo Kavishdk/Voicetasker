@@ -143,29 +143,44 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({ onProcessingStart, onProc
   };
 
   return (
-    <div className="relative group">
+    <div className="relative group z-50">
+      {/* Ripple Effect when Recording */}
+      {isRecording && (
+        <>
+          <div className="absolute inset-0 bg-rose-500 rounded-full animate-ping opacity-20"></div>
+          <div className="absolute -inset-2 bg-rose-500 rounded-full animate-pulse opacity-10"></div>
+        </>
+      )}
+
       <button
         onClick={isRecording ? stopRecording : startRecording}
-        className={`p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 ${isRecording
-            ? 'bg-red-500 hover:bg-red-600 ring-red-200 animate-pulse'
-            : 'bg-indigo-600 hover:bg-indigo-700 ring-indigo-200'
+        className={`relative p-5 rounded-full shadow-2xl transition-all duration-500 transform hover:scale-110 focus:outline-none focus:ring-4 ${isRecording
+          ? 'bg-gradient-to-r from-rose-500 to-pink-600 ring-rose-200'
+          : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 ring-indigo-200'
           }`}
         aria-label={isRecording ? "Stop Recording" : "Start Voice Command"}
       >
         {isRecording ? (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-          </svg>
+          <div className="flex items-center justify-center">
+            <div className="w-8 h-8 relative">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-25 animate-ping"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+              </svg>
+            </div>
+          </div>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
           </svg>
         )}
       </button>
+
       {/* Tooltip */}
-      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-        {isRecording ? "Listening... (Stops automatically)" : "Create Task via Voice"}
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-4 py-2 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 whitespace-nowrap pointer-events-none shadow-xl">
+        {isRecording ? "Listening... (Stops automatically)" : "Tap to Speak"}
+        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900/90 rotate-45"></div>
       </div>
     </div>
   );
