@@ -1,79 +1,71 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { ParsedTaskResponse, TaskStatus, TaskPriority } from "../types";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { ParsedTaskResponse } from "../types";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
-const ai = new GoogleGenAI({ apiKey: apiKey || '' });
-
-export const parseVoiceCommand = async (audioBase64: string, mimeType: string): Promise<ParsedTaskResponse> => {
+export const parseVoiceCommand = async (
+  audioBase64: string,
+  mimeType: string
+): Promise<ParsedTaskResponse> => {
   if (!apiKey) {
     throw new Error("API Key is missing.");
   }
 
   const currentDate = new Date().toISOString();
 
-  const systemInstruction = `
-    You are an intelligent task assistant. 
-    Your goal is to listen to the user's voice command and extract structured task information.
-    
-    Current Date: ${currentDate}
-    
-    Rules:
-    1. Extract a concise 'title'.
-    2. Extract a 'description' if more details are provided.
-    3. Determine 'priority' from keywords (e.g., "urgent" -> Critical, "high" -> High). Default to Medium.
-    4. Determine 'status' (e.g., "completed" -> Done, "working on" -> In Progress). Default to To Do.
-    5. Calculate the 'dueDate' as an ISO 8601 string (YYYY-MM-DDTHH:mm:ss). 
-       - If a time is mentioned (e.g., "by 5pm"), include it in the ISO string.
-       - If only a date is mentioned (e.g., "tomorrow"), use the date with T12:00:00 or leaving time implicit is fine, but preferably T23:59:59 if it implies 'by end of day'.
-       - If no date is mentioned, return null.
-    6. Return the raw transcript of what was said as 'originalTranscript'.
-  `;
-
-  const model = "gemini-2.5-flash";
+  // 1. Move configuration into the initial model setup
+  const model = genAI.getGenerativeModel({
+    model: "gemini-flash-latest", // Confirmed working via live test script
+    systemInstruction: `
+      You are an assistant that extracts tasks from audio.
+      Current Date: ${currentDate}
+      Return JSON with: title, description, status (To Do/In Progress/Done), 
+      priority (Low/Medium/High/Critical), dueDate (ISO), and originalTranscript.
+    `,
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: SchemaType.OBJECT,
+        properties: {
+          title: { type: SchemaType.STRING },
+          description: { type: SchemaType.STRING },
+          status: { type: SchemaType.STRING },
+          priority: { type: SchemaType.STRING },
+          dueDate: { type: SchemaType.STRING },
+          originalTranscript: { type: SchemaType.STRING },
+        },
+        required: ["title", "originalTranscript"],
+      },
+    },
+  });
 
   try {
-    const response = await ai.models.generateContent({
-      model: model,
-      contents: {
-        parts: [
-          {
-            inlineData: {
-              mimeType: mimeType,
-              data: audioBase64
-            }
-          },
-          {
-            text: "Listen to this audio, transcribe it, and extract the task details as JSON."
-          }
-        ]
+    // 2. Pass data as a single Content object
+    const result = await model.generateContent([
+      {
+        inlineData: {
+          mimeType: mimeType,
+          data: audioBase64,
+        },
       },
-      config: {
-        systemInstruction: systemInstruction,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            title: { type: Type.STRING },
-            description: { type: Type.STRING },
-            status: { type: Type.STRING, enum: [TaskStatus.Todo, TaskStatus.InProgress, TaskStatus.Done] },
-            priority: { type: Type.STRING, enum: [TaskPriority.Low, TaskPriority.Medium, TaskPriority.High, TaskPriority.Critical] },
-            dueDate: { type: Type.STRING, description: "ISO 8601 date string YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss" },
-            originalTranscript: { type: Type.STRING }
-          },
-          required: ["title", "originalTranscript"]
-        }
-      }
-    });
+      "Extract task details from this audio stringently following the schema."
+    ]);
 
-    const text = response.text;
-    if (!text) throw new Error("No response from AI");
+    const response = await result.response;
+    const text = response.text();
 
-    const parsed = JSON.parse(text) as ParsedTaskResponse;
-    return parsed;
+    if (!text) throw new Error("Empty response text");
 
-  } catch (error) {
-    console.error("Gemini Parsing Error:", error);
-    throw new Error("Failed to parse voice command.");
+    return JSON.parse(text) as ParsedTaskResponse;
+  } catch (error: any) {
+    // 3. Debugging: Log the exact error message from the API
+    console.error("Gemini Error:", error);
+
+    if (error.message?.includes("404")) {
+      throw new Error("Model not found. Please ensure gemini-1.5-flash is enabled in AI Studio.");
+    }
+
+    throw new Error(`Failed to parse voice command: ${error.message}`);
   }
 };

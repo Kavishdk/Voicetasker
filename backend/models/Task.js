@@ -24,19 +24,18 @@ const taskSchema = new mongoose.Schema({
         default: 'Medium'
     },
     dueDate: {
-        type: String, // Storing as ISO string to match frontend format (YYYY-MM-DDTHH:mm:ss)
+        type: String, 
     },
     createdAt: {
         type: Number,
         default: Date.now
     }
 }, {
-    // Ensure virtuals are included when converting to JSON/Object
     toJSON: {
         virtuals: true,
         versionKey: false,
         transform: function (doc, ret) {
-            ret.id = ret._id; // Map _id to id for frontend compatibility
+            ret.id = ret._id; 
             delete ret._id;
         }
     },
